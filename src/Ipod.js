@@ -1,4 +1,6 @@
 import React from 'react';
+import Display from './display';
+import ZingTouch from 'zingtouch';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faBars, faBackward,faForward, faPlay, faPause } from '@fortawesome/free-solid-svg-icons' // <-- import styles to be used
 
@@ -14,17 +16,167 @@ class Ipod extends React.Component{
             play : true
         }
     }
+
+    rotateWheel = () => {
+        var containerElement = document.getElementById('wheel');
+        var activeRegion = new ZingTouch.Region(containerElement);
+        var change = 0;
+        var self = this;
+        self.state.enter = self.state.enter + 1;
+        if(self.state.enter < 2){
+            activeRegion.bind(containerElement, 'rotate', function(event){
+                //Perform Operations
+                var newAngle = event.detail.distanceFromLast;
+                console.log(newAngle);
+                if(newAngle < 0){
+                    console.log(change);
+                    change++;
+                    if(change === 15){
+                        console.log("change state");
+                        change = 0;
+                        if(self.state.activePage === 'Home'){
+                            if(self.state.activeItem === 'NowPlaying'){
+                                self.setState({
+                                    activeItem : "Music"
+                                })
+                            }else if(self.state.activeItem === 'Music'){
+                                self.setState({
+                                    activeItem : "Games"
+                                })
+                            }else if(self.state.activeItem === 'Games'){
+                                self.setState({
+                                    activeItem : "Settings"
+                                })
+                            }else if(self.state.activeItem === 'Settings'){
+                                self.setState({
+                                    activeItem : "NowPlaying"
+                                })
+                            }
+                        }else if(self.state.activePage === 'Music'){
+                            if(self.state.activeItem === 'MyMusic'){
+                                self.setState({
+                                    activeItem : "Artists"
+                                })
+                            }else if(self.state.activeItem === 'Artists'){
+                                self.setState({
+                                    activeItem : "MyMusic"
+                                })
+                            }
+                        }
+                    }
+                }else{
+                    console.log(change);
+                    change++;
+                    if(change === 15){
+                        console.log("change state");
+                        change = 0;
+                        if(self.state.activePage === 'Home'){
+                            if(self.state.activeItem === 'NowPlaying'){
+                                self.setState({
+                                    activeItem : "Settings"
+                                })
+                            }else if(self.state.activeItem === 'Music'){
+                                self.setState({
+                                    activeItem : "NowPlaying"
+                                })
+                            }else if(self.state.activeItem === 'Games'){
+                                self.setState({
+                                    activeItem : "Music"
+                                })
+                            }else if(self.state.activeItem === 'Settings'){
+                                self.setState({
+                                    activeItem : "Games"
+                                })
+                            }
+                        }else if(self.state.activePage === 'Music'){
+                            if(self.state.activeItem === 'MyMusic'){
+                                self.setState({
+                                    activeItem : "Artists"
+                                })
+                            }else if(self.state.activeItem === 'Artists'){
+                                self.setState({
+                                    activeItem : "MyMusic"
+                                })
+                            }
+                        }
+                    }
+                }
+                });
+        }else{
+            console.log("Not allowed to enter")
+        }
+    }
+
+    changePage = () => {
+        //change the pages acc to the command
+        if(this.state.activeItem === 'Music'){
+            this.setState({
+                activeItem : 'MyMusic',
+                activePage : this.state.activeItem
+            })
+        }else if(this.state.activeItem === 'NowPlaying'){
+            this.setState({
+                activeItem : 'NowPlaying',
+                activePage : 'MyMusic'
+            })
+        }else{
+            this.setState({
+                activeItem : this.state.activeItem,
+                activePage : this.state.activeItem
+            })
+        }         
+    }
+
+    changePageToHomeScreen = () => {
+        //changing pages acc to the command
+        if(this.state.activeItem === 'MyMusic' || this.state.activeItem === 'Artists'){
+            this.setState({
+                activeItem : 'Music',
+                activePage : 'Home'
+            })
+        }else{
+            this.setState({
+                activeItem : this.state.activeItem,
+                activePage : 'Home'
+            })
+        }
+    }
+    //toggle
+    toggle = () => {
+        if(this.state.activePage === 'MyMusic'){
+            if(this.state.play === true){
+                this.state.audio.pause();
+                this.setState({
+                    play : false
+                })
+            }else{
+                this.state.audio.play();
+                this.setState({
+                    play : true
+                })
+            }
+            console.log("toggled")
+        }
+    }
+    componentDidMount(){
+        let audio = document.getElementsByClassName("audio-element")[0];
+        console.log(audio)
+        this.setState({
+            audio : audio,
+        })
+        console.log(this.state)
+    }
     
     render() {
         return (
             <div style={styles.ipodBody}>
 
                 <div style={styles.screen}>
-
+                    <Display activeItem={this.state.activeItem} activePage={this.state.activePage} />
                 </div>
-                <div style={styles.wheel}>
+                <div id='wheel' style={styles.wheel} onMouseOver={this.rotateWheel}>
                     <div style={styles.buttonContainer}>
-                        <div style={styles.menuButton}>
+                        <div onClick={this.changePageToHomeScreen} style={styles.menuButton}>
                             <FontAwesomeIcon style={styles.icons} icon={faBars} />
                         </div>
 
@@ -34,9 +186,7 @@ class Ipod extends React.Component{
                             <FontAwesomeIcon style={styles.icons} icon={faBackward} />
                         </div>
                         <div style={styles.midButton}>
-                            <div style={styles.centerButton}>
-                            
-                            </div>
+                            <div onClick={this.changePage} style={styles.centerButton}></div>
                             
                         </div>
                         <div style={styles.midButton}>
