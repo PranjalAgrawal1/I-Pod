@@ -3,7 +3,7 @@ import Display from './display';
 import ZingTouch from 'zingtouch';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faBars, faBackward,faForward, faPlay, faPause } from '@fortawesome/free-solid-svg-icons' // <-- import styles to be used
-
+import sound from './assets/music/Saansein.mp3'
 
 class Ipod extends React.Component{
     //constructor 
@@ -169,10 +169,14 @@ class Ipod extends React.Component{
     
     render() {
         return (
+
             <div style={styles.ipodBody}>
+                <audio className="audio-element">
+                    <source src={sound}></source>
+                </audio>    
 
                 <div style={styles.screen}>
-                    <Display activeItem={this.state.activeItem} activePage={this.state.activePage} />
+                    <Display activeItem={this.state.activeItem} activePage={this.state.activePage} audio={this.state.audio} />
                 </div>
                 <div id='wheel' style={styles.wheel} onMouseOver={this.rotateWheel}>
                     <div style={styles.buttonContainer}>
@@ -195,7 +199,7 @@ class Ipod extends React.Component{
 
                     </div>
                     <div style={styles.buttonContainer}>
-                        <div style={styles.menuButton}>
+                        <div onClick={this.toggle} style={styles.menuButton}>
                             <FontAwesomeIcon style={styles.icons} icon={faPlay} />
                             &nbsp;<FontAwesomeIcon style={styles.icons} icon={faPause} />
                         </div>
@@ -214,8 +218,11 @@ const styles = {
         height: "525px",
         width: "300px",
         background: "silver",
-        margin: "auto",
-        padding: 25
+        margin : '4rem auto',
+        padding: 25,
+        borderRadius: "15px",
+        boxShadow: "0.5px -0.5px 10px 1px black inset"
+
     },
     screen:{
         height: 200,

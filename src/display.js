@@ -1,7 +1,10 @@
 import React from "react";
+import Artists from "./Artists";
 import Games from "./Games";
 import Home from './Home';
 import Music from "./Music";
+import MyMusic from "./MyMusic";
+import Settings from "./Settings";
 
 
 
@@ -14,10 +17,10 @@ class Screen extends React.Component{
                 {this.props.activePage==='Home'?<Home activeItem = {this.props.activeItem}/> : null}
                 {this.props.activePage==='Music'?<Music activeItem={this.props.activeItem}/> : null}
                 {this.props.activePage==='Games'?<Games /> : null}
-                {/* {this.props.activePage==='Settings'?<Settings /> : null}
+                {this.props.activePage==='Settings'?<Settings /> : null}
                 {this.props.activePage==='MyMusic'?<MyMusic audio={this.props.audio} /> : null}
                 {this.props.activePage==='Artists'?<Artists /> : null}
-            */}
+            
             </div>
         )
     }

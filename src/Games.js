@@ -7,9 +7,9 @@ class Games extends React.Component{
             <div style={styles.settings} >
                 {/* title bar */}
                 <div style={styles.titleBar}>
-                        iPod
-                        <FontAwesomeIcon icon={faBatteryFull} />
-                    </div>
+                    <div>iPod</div>
+                    <div><FontAwesomeIcon icon={faBatteryFull} /></div>
+                </div>
                 {/* game */}
                 <div style={{width : '100%' , height : '90%'}}>
                     <img style={styles.image} src="https://media1.giphy.com/media/d9QiBcfzg64Io/giphy.gif" />
@@ -25,17 +25,18 @@ const styles = {
         height : '100%',
         display : 'flex',
         flexDirection : 'row',
-        justifyContent : 'center',
+        // justifyContent : 'center',
         flexWrap : 'wrap'
     },
     image : {
         width:'100%',
         height:'100%',
+        borderRadius:'0 0 5px 5px',
         alignSelf : 'center'
     },
     titleBar : {
         height:'10%',
-        width:'50',
+        width:300,
         borderRadius:'5px 0 0 0',
         backgroundImage: 'linear-gradient(0deg, rgb(192, 192, 192), transparent)',
         borderBottom: '1px solid #6c757d',
